@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 /// Advanced input validation class with comprehensive validation rules
 /// and professional error handling for Flutter applications.
-class TInputValidation {
+class SmartInputValidation {
   final String? label;
   final bool required;
   final int? minLength;
@@ -30,12 +30,10 @@ class TInputValidation {
   final String? datetimeFormat;
 
   // Advanced validations
-  final List<String>? allowedValues;
-  final bool? caseSensitive;
   final ValidationType? validationType;
   final Map<String, dynamic>? customValidation;
 
-  TInputValidation._({
+  SmartInputValidation._({
     this.label,
     this.required = false,
     this.minLength,
@@ -59,8 +57,7 @@ class TInputValidation {
     this.timeFormat,
     this.datetimeFormat,
     this.validationType,
-    // ignore: unused_element_parameter
-    this.customValidation, this.allowedValues, this.caseSensitive,
+    this.customValidation,
   });
 
   bool _isValid = false;
@@ -69,7 +66,7 @@ class TInputValidation {
   // ============ FACTORY CONSTRUCTORS ============
 
   /// Email Validator with advanced options
-  factory TInputValidation.email({
+  factory SmartInputValidation.email({
     String? label,
     bool required = true,
     String? customErrorMessage,
@@ -83,10 +80,11 @@ class TInputValidation {
         : r'^[a-zA-Z0-9.!#$%&’*/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$';
 
     if (!allowMultipleDots) {
-      pattern = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$';
+      pattern =
+          r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$';
     }
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: pattern,
@@ -100,7 +98,7 @@ class TInputValidation {
   }
 
   /// Phone Validator with international support
-  factory TInputValidation.phone({
+  factory SmartInputValidation.phone({
     String? label,
     bool required = true,
     int minLength = 8,
@@ -113,7 +111,7 @@ class TInputValidation {
     // Enhanced international phone pattern
     const pattern = r'^[\+]?[1-9][\d]{0,15}$|^[0-9\-\s\(\)]{8,20}$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       minLength: minLength,
@@ -130,7 +128,7 @@ class TInputValidation {
   }
 
   /// Advanced Password Validator with configurable requirements
-  factory TInputValidation.password({
+  factory SmartInputValidation.password({
     String? label,
     bool required = true,
     int minLength = 8,
@@ -145,19 +143,19 @@ class TInputValidation {
     List<String>? commonPasswords,
   }) {
     final buffer = StringBuffer(r'^');
-    
+
     if (requireUppercase) buffer.write(r'(?=.*[A-Z])');
     if (requireLowercase) buffer.write(r'(?=.*[a-z])');
     if (requireNumbers) buffer.write(r'(?=.*\d)');
     if (requireSpecialChars) buffer.write(r'(?=.*[\W_])');
-    
+
     buffer.write(r'.{');
     buffer.write(minLength);
     buffer.write(',');
     buffer.write(maxLength);
     buffer.write(r'}$');
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       minLength: minLength,
@@ -178,26 +176,24 @@ class TInputValidation {
   }
 
   /// Credit Card Validator
-  factory TInputValidation.creditCard({
+  factory SmartInputValidation.creditCard({
     String? label,
     bool required = true,
     String? customErrorMessage,
     List<CardType> allowedCardTypes = CardType.values,
   }) {
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: r'^[0-9\s]{13,19}$',
       customErrorMessage: customErrorMessage,
       validationType: ValidationType.creditCard,
-      customValidation: {
-        'allowedCardTypes': allowedCardTypes,
-      },
+      customValidation: {'allowedCardTypes': allowedCardTypes},
     );
   }
 
   /// URL Validator with protocol options
-  factory TInputValidation.url({
+  factory SmartInputValidation.url({
     String? label,
     bool required = false,
     String? customErrorMessage,
@@ -208,7 +204,7 @@ class TInputValidation {
     final protocol = requireProtocol ? r'^(https?:\/\/)' : r'^(https?:\/\/)?';
     const pattern = r'([\w\-])+\.{1}([a-zA-Z]{2,63})([\/\w\.-]*)*\/?$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: protocol + pattern,
@@ -223,7 +219,7 @@ class TInputValidation {
   }
 
   /// IP Address Validator (IPv4 & IPv6)
-  factory TInputValidation.ipAddress({
+  factory SmartInputValidation.ipAddress({
     String? label,
     bool required = true,
     String? customErrorMessage,
@@ -232,14 +228,16 @@ class TInputValidation {
   }) {
     String pattern = '';
     if (allowIPv4 && allowIPv6) {
-      pattern = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$';
+      pattern =
+          r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$|^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$';
     } else if (allowIPv4) {
-      pattern = r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
+      pattern =
+          r'^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$';
     } else if (allowIPv6) {
       pattern = r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$';
     }
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: pattern,
@@ -249,7 +247,7 @@ class TInputValidation {
   }
 
   /// Hexadecimal Color Validator
-  factory TInputValidation.hexColor({
+  factory SmartInputValidation.hexColor({
     String? label,
     bool required = true,
     String? customErrorMessage,
@@ -259,7 +257,7 @@ class TInputValidation {
         ? r'^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$'
         : r'^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{8})$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: pattern,
@@ -269,16 +267,17 @@ class TInputValidation {
   }
 
   /// UUID Validator
-  factory TInputValidation.uuid({
+  factory SmartInputValidation.uuid({
     String? label,
     bool required = true,
     String? customErrorMessage,
     List<UuidVersion> versions = UuidVersion.values,
   }) {
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
-      pattern: r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
+      pattern:
+          r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$',
       customErrorMessage: customErrorMessage,
       validationType: ValidationType.uuid,
       customValidation: {'versions': versions},
@@ -286,12 +285,12 @@ class TInputValidation {
   }
 
   /// JSON Validator
-  factory TInputValidation.json({
+  factory SmartInputValidation.json({
     String? label,
     bool required = true,
     String? customErrorMessage,
   }) {
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       customErrorMessage: customErrorMessage,
@@ -300,14 +299,15 @@ class TInputValidation {
   }
 
   /// ISBN Validator (10 & 13)
-  factory TInputValidation.isbn({
+  factory SmartInputValidation.isbn({
     String? label,
     bool required = true,
     String? customErrorMessage,
   }) {
-    const pattern = r'^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$';
+    const pattern =
+        r'^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: pattern,
@@ -317,14 +317,14 @@ class TInputValidation {
   }
 
   /// MAC Address Validator
-  factory TInputValidation.macAddress({
+  factory SmartInputValidation.macAddress({
     String? label,
     bool required = true,
     String? customErrorMessage,
   }) {
     const pattern = r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       pattern: pattern,
@@ -334,7 +334,7 @@ class TInputValidation {
   }
 
   /// Price/Currency Validator
-  factory TInputValidation.price({
+  factory SmartInputValidation.price({
     String? label,
     bool required = true,
     num? minValue,
@@ -350,7 +350,7 @@ class TInputValidation {
     final signPart = allowNegative ? r'-?' : '';
     final pattern = r'^' + signPart + r'\d{1,3}(,\d{3})*' + decimalPart + r'$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       minValue: minValue,
@@ -366,7 +366,8 @@ class TInputValidation {
   }
 
   /// Number Validator with advanced options
-  factory TInputValidation.number({
+  /// Number Validator with advanced options
+  factory SmartInputValidation.number({
     String? label,
     bool required = true,
     num? minValue,
@@ -374,23 +375,32 @@ class TInputValidation {
     int maxDecimalPlaces = 0,
     bool allowNegative = false,
     bool allowCommas = true,
+    bool allowDecimals = false,
     String? customErrorMessage,
   }) {
-    final decimalPart = maxDecimalPlaces > 0
-        ? r'(\.\d{1,' + maxDecimalPlaces.toString() + r'})?'
-        : '';
+    // Sign
     final signPart = allowNegative ? r'-?' : '';
+
+    // Integer part (with or without commas)
     final commaPart = allowCommas ? r'\d{1,3}(,\d{3})*' : r'\d+';
+
+    // Decimal part
+    final decimalPart = allowDecimals
+        ? (maxDecimalPlaces > 0
+              ? r'(\.\d{1,' + maxDecimalPlaces.toString() + r'})?'
+              : r'(\.\d+)?') // if decimals allowed but no max specified
+        : ''; // no decimals allowed
+
     final pattern = r'^' + signPart + commaPart + decimalPart + r'$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       minValue: minValue,
       maxValue: maxValue,
-      allowDecimals: maxDecimalPlaces > 0,
+      allowDecimals: allowDecimals,
       allowNegative: allowNegative,
-      maxDecimalPlaces: maxDecimalPlaces,
+      maxDecimalPlaces: allowDecimals ? maxDecimalPlaces : 0,
       pattern: pattern,
       customErrorMessage: customErrorMessage,
       validationType: ValidationType.number,
@@ -398,7 +408,7 @@ class TInputValidation {
   }
 
   /// Date Validator with flexible formats
-  factory TInputValidation.date({
+  factory SmartInputValidation.date({
     String? label,
     bool required = true,
     DateTime? minDate,
@@ -406,7 +416,7 @@ class TInputValidation {
     String? customErrorMessage,
     String dateFormat = 'dd/MM/yyyy',
     List<String>? additionalFormats,
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     minDate: minDate,
@@ -418,7 +428,7 @@ class TInputValidation {
   );
 
   /// Time Validator
-  factory TInputValidation.time({
+  factory SmartInputValidation.time({
     String? label,
     bool required = true,
     DateTime? minTime,
@@ -426,7 +436,7 @@ class TInputValidation {
     String? customErrorMessage,
     String timeFormat = 'HH:mm',
     bool allowSeconds = false,
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     minTime: minTime,
@@ -438,14 +448,14 @@ class TInputValidation {
   );
 
   /// DateTime Validator
-  factory TInputValidation.datetime({
+  factory SmartInputValidation.datetime({
     String? label,
     bool required = true,
     DateTime? minDateTime,
     DateTime? maxDateTime,
     String? customErrorMessage,
     String datetimeFormat = 'dd/MM/yyyy HH:mm',
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     minDateTime: minDateTime,
@@ -456,7 +466,7 @@ class TInputValidation {
   );
 
   /// Generic Text Validator
-  factory TInputValidation.text({
+  factory SmartInputValidation.text({
     String? label,
     bool required = false,
     int? minLength,
@@ -465,7 +475,7 @@ class TInputValidation {
     String? customErrorMessage,
     bool allowWhitespace = true,
     bool trimValue = true,
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     minLength: minLength,
@@ -478,11 +488,11 @@ class TInputValidation {
   );
 
   /// Dropdown/Selection Validator
-  factory TInputValidation.dropdown({
+  factory SmartInputValidation.dropdown({
     String? label,
     bool required = true,
     String? customErrorMessage,
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     customErrorMessage: customErrorMessage,
@@ -490,7 +500,7 @@ class TInputValidation {
   );
 
   /// Username Validator
-  factory TInputValidation.username({
+  factory SmartInputValidation.username({
     String? label,
     bool required = true,
     int minLength = 3,
@@ -499,28 +509,38 @@ class TInputValidation {
     bool allowSpecialChars = true,
   }) {
     final pattern = allowSpecialChars
-        ? r'^[a-zA-Z][a-zA-Z0-9._]{' + (minLength - 1).toString() + r',' + (maxLength - 1).toString() + r'}$'
-        : r'^[a-zA-Z][a-zA-Z0-9]{' + (minLength - 1).toString() + r',' + (maxLength - 1).toString() + r'}$';
+        ? r'^[a-zA-Z][a-zA-Z0-9._]{' +
+              (minLength - 1).toString() +
+              r',' +
+              (maxLength - 1).toString() +
+              r'}$'
+        : r'^[a-zA-Z][a-zA-Z0-9]{' +
+              (minLength - 1).toString() +
+              r',' +
+              (maxLength - 1).toString() +
+              r'}$';
 
-    return TInputValidation._(
+    return SmartInputValidation._(
       label: label,
       required: required,
       minLength: minLength,
       maxLength: maxLength,
       pattern: pattern,
-      customErrorMessage: customErrorMessage ?? 'Username must start with a letter and can only contain letters, numbers${allowSpecialChars ? ', underscores, and periods' : ''}.',
+      customErrorMessage:
+          customErrorMessage ??
+          'Username must start with a letter and can only contain letters, numbers${allowSpecialChars ? ', underscores, and periods' : ''}.',
       validationType: ValidationType.username,
     );
   }
 
   /// Custom Validator with regex pattern
-  factory TInputValidation.custom({
+  factory SmartInputValidation.custom({
     String? label,
     bool required = false,
     String pattern = r'.*',
     String? customErrorMessage,
     Map<String, dynamic>? customRules,
-  }) => TInputValidation._(
+  }) => SmartInputValidation._(
     label: label,
     required: required,
     pattern: pattern,
@@ -656,11 +676,11 @@ class TInputValidation {
 
     // Clean phone number for length validation
     final cleanNumber = value.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
-    
+
     if (minLength != null && cleanNumber.length < minLength!) {
       return "$fieldLabel must be at least $minLength digits.";
     }
-    
+
     if (maxLength != null && cleanNumber.length > maxLength!) {
       return "$fieldLabel cannot exceed $maxLength digits.";
     }
@@ -673,17 +693,20 @@ class TInputValidation {
 
     if (pattern != null && !RegExp(pattern!).hasMatch(value)) {
       final rules = customValidation ?? {};
-      
-      if (rules['requireUppercase'] == true && !RegExp(r'[A-Z]').hasMatch(value)) {
+
+      if (rules['requireUppercase'] == true &&
+          !RegExp(r'[A-Z]').hasMatch(value)) {
         missingRequirements.add('uppercase letter');
       }
-      if (rules['requireLowercase'] == true && !RegExp(r'[a-z]').hasMatch(value)) {
+      if (rules['requireLowercase'] == true &&
+          !RegExp(r'[a-z]').hasMatch(value)) {
         missingRequirements.add('lowercase letter');
       }
       if (rules['requireNumbers'] == true && !RegExp(r'\d').hasMatch(value)) {
         missingRequirements.add('number');
       }
-      if (rules['requireSpecialChars'] == true && !RegExp(r'[\W_]').hasMatch(value)) {
+      if (rules['requireSpecialChars'] == true &&
+          !RegExp(r'[\W_]').hasMatch(value)) {
         missingRequirements.add('special character');
       }
       if (minLength != null && value.length < minLength!) {
@@ -691,14 +714,18 @@ class TInputValidation {
       }
 
       if (missingRequirements.isNotEmpty) {
-        final requirementsList = missingRequirements.map((req) => '• $req').join('\n');
+        final requirementsList = missingRequirements
+            .map((req) => '• $req')
+            .join('\n');
         return "Password must contain:\n$requirementsList";
       }
     }
 
     // Check for common passwords
-    final commonPasswords = customValidation?['commonPasswords'] as List<String>?;
-    if (commonPasswords != null && commonPasswords.contains(value.toLowerCase())) {
+    final commonPasswords =
+        customValidation?['commonPasswords'] as List<String>?;
+    if (commonPasswords != null &&
+        commonPasswords.contains(value.toLowerCase())) {
       return "This password is too common. Please choose a stronger one.";
     }
 
@@ -734,7 +761,9 @@ class TInputValidation {
   String? _validateNumber(String value, String fieldLabel) {
     // Clean the value for parsing
     final cleanValue = value.replaceAll(',', '');
-    final numValue = allowDecimals ? double.tryParse(cleanValue) : int.tryParse(cleanValue);
+    final numValue = allowDecimals
+        ? double.tryParse(cleanValue)
+        : int.tryParse(cleanValue);
 
     if (numValue == null) {
       return "Please enter a valid number for $fieldLabel.";
@@ -753,7 +782,9 @@ class TInputValidation {
     }
 
     if (allowDecimals && maxDecimalPlaces != null) {
-      final decimalPart = value.split('.').length > 1 ? value.split('.')[1] : '';
+      final decimalPart = value.split('.').length > 1
+          ? value.split('.')[1]
+          : '';
       if (decimalPart.length > maxDecimalPlaces!) {
         return "$fieldLabel cannot have more than $maxDecimalPlaces decimal place${maxDecimalPlaces! > 1 ? 's' : ''}.";
       }
@@ -774,8 +805,9 @@ class TInputValidation {
         return "$fieldLabel cannot be later than ${formatter.format(maxDate!)}.";
       }
     } catch (e) {
-      final additionalFormats = customValidation?['additionalFormats'] as List<String>?;
-      
+      final additionalFormats =
+          customValidation?['additionalFormats'] as List<String>?;
+
       if (additionalFormats != null) {
         for (final format in additionalFormats) {
           try {
@@ -786,8 +818,9 @@ class TInputValidation {
           }
         }
       }
-      
-      return customErrorMessage ?? "Please enter a valid date (expected format: ${dateFormat ?? 'dd/MM/yyyy'}).";
+
+      return customErrorMessage ??
+          "Please enter a valid date (expected format: ${dateFormat ?? 'dd/MM/yyyy'}).";
     }
     return null;
   }
@@ -804,7 +837,8 @@ class TInputValidation {
         return "$fieldLabel cannot be later than ${formatter.format(maxTime!)}.";
       }
     } catch (e) {
-      return customErrorMessage ?? "Please enter a valid time (expected format: ${timeFormat ?? 'HH:mm'}).";
+      return customErrorMessage ??
+          "Please enter a valid time (expected format: ${timeFormat ?? 'HH:mm'}).";
     }
     return null;
   }
@@ -821,7 +855,8 @@ class TInputValidation {
         return "$fieldLabel cannot be later than ${formatter.format(maxDateTime!)}.";
       }
     } catch (e) {
-      return customErrorMessage ?? "Please enter a valid date and time (expected format: ${datetimeFormat ?? 'dd/MM/yyyy HH:mm'}).";
+      return customErrorMessage ??
+          "Please enter a valid date and time (expected format: ${datetimeFormat ?? 'dd/MM/yyyy HH:mm'}).";
     }
     return null;
   }
@@ -842,17 +877,17 @@ class TInputValidation {
       return "$fieldLabel cannot exceed $maxLength characters.";
     }
 
+    // Whitespace validation - fix this logic
+    if (!allowWhitespace && value.contains(RegExp(r'\s'))) {
+      return "$fieldLabel cannot contain whitespace.";
+    }
+
     // Pattern validation
     if (pattern != null && !RegExp(pattern!).hasMatch(value)) {
       if (customErrorMessage != null) {
         return customErrorMessage;
       }
       return "Invalid format for $fieldLabel.";
-    }
-
-    // Allowed/Disallowed values
-    if (allowedValues != null && !allowedValues!.contains(caseSensitive != null ? value : value.toLowerCase())) {
-      return "$fieldLabel must be one of: ${allowedValues!.join(', ')}";
     }
 
     return null;
@@ -885,7 +920,7 @@ class TInputValidation {
       // ignore: unused_local_variable
       final json = value; // In real implementation, you'd use dart:convert
       // For now, just check if it looks like JSON
-      if (!(value.startsWith('{') && value.endsWith('}')) && 
+      if (!(value.startsWith('{') && value.endsWith('}')) &&
           !(value.startsWith('[') && value.endsWith(']'))) {
         throw FormatException();
       }
@@ -915,29 +950,39 @@ class TInputValidation {
   bool _isValidLuhn(String number) {
     int sum = 0;
     bool alternate = false;
-    
+
     for (int i = number.length - 1; i >= 0; i--) {
       int digit = int.tryParse(number[i]) ?? -1;
       if (digit == -1) return false;
-      
+
       if (alternate) {
         digit *= 2;
         if (digit > 9) {
           digit = (digit % 10) + 1;
         }
       }
-      
+
       sum += digit;
       alternate = !alternate;
     }
-    
+
     return (sum % 10) == 0;
   }
 
   static List<String> _getCommonPasswords() {
     return [
-      'password', '123456', '12345678', '1234', 'qwerty', '12345',
-      'dragon', 'baseball', 'football', 'letmein', 'monkey', 'abc123'
+      'password',
+      '123456',
+      '12345678',
+      '1234',
+      'qwerty',
+      '12345',
+      'dragon',
+      'baseball',
+      'football',
+      'letmein',
+      'monkey',
+      'abc123',
     ];
   }
 
@@ -977,19 +1022,6 @@ enum ValidationType {
   custom,
 }
 
-enum CardType {
-  visa,
-  mastercard,
-  americanExpress,
-  discover,
-  dinersClub,
-  jcb,
-}
+enum CardType { visa, mastercard, americanExpress, discover, dinersClub, jcb }
 
-enum UuidVersion {
-  v1,
-  v2,
-  v3,
-  v4,
-  v5,
-}
+enum UuidVersion { v1, v2, v3, v4, v5 }

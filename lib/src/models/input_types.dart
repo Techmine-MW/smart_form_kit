@@ -9,13 +9,20 @@ enum SmartInputType {
   date,
   time,
   datetime,
+  password,
+  creditCard,
+  ipAddress,
+  hexColor,
+  uuid,
+  json,
+  isbn,
+  macAddress,
+  username,
+  dropdown,
+  custom,
 }
 
-enum MobileNetworkOperator {
-  airtel,
-  tnm,
-  zero2,
-}
+enum MobileNetworkOperator { airtel, tnm, zero2 }
 
 class NumberInputType {
   final bool decimal;
@@ -39,8 +46,5 @@ class DropdownInputType {
   final List<dynamic> items;
   final List<dynamic> dropDownValues;
 
-  const DropdownInputType({
-    required this.items,
-    required this.dropDownValues,
-  });
+  const DropdownInputType({required this.items, required this.dropDownValues});
 }

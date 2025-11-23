@@ -569,7 +569,7 @@ SOFTWARE.
 
 - **Documentation**: [docs.techminemw.com/smart-form-kit](https://docs.techminemw.com/smart-form-kit)
 - **Issues**: [GitHub Issues](https://github.com/Techmine-MW/smart_form_kit/issues)
-- **Email**: <contact@techminemw.com>
+- **Email**: <info@techminemw.com>
 
 ## 🙏 Acknowledgments
 

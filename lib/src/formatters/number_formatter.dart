@@ -30,7 +30,7 @@ class NumberFormatter extends TextInputFormatter {
 
     String regexPattern = signed ? r'^-?' : r'^';
     regexPattern += decimal ? r'\d*\.?\d*$' : r'\d*$';
-    
+
     final isValid = RegExp(regexPattern).hasMatch(text);
     if (!isValid) return oldValue;
 
@@ -38,7 +38,8 @@ class NumberFormatter extends TextInputFormatter {
       return newValue;
     }
 
-    if (maxLength != null && text.replaceAll(RegExp(r'[^\d]'), '').length > maxLength!) {
+    if (maxLength != null &&
+        text.replaceAll(RegExp(r'[^\d]'), '').length > maxLength!) {
       return oldValue;
     }
 
