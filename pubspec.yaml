@@ -4,9 +4,6 @@ version: 1.0.0
 homepage: https://techminemw.com/packages/smart_form_kit
 repository: https://github.com/Techmine-MW/smart_form_kit
 
-publish_to: https://pub.dev
-
-
 environment:
   sdk: ^3.10.0
   flutter: ">=1.17.0"
