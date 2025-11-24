@@ -71,7 +71,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  smart_form_kit: ^1.0.0
+  smart_form_kit: ^1.0.0+1
 ```
 
 Then run:
