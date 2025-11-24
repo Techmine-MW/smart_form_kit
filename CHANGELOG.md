@@ -1,3 +1,3 @@
-## 1.0.0
+## 1.0.0+1
 
-* TODO: Describe initial release.
+Release v1.0.0+1 - Smart Form Kit package
