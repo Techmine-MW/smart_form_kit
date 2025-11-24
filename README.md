@@ -9,7 +9,7 @@
 
 **A comprehensive Flutter form package with smart validation, formatting, and multiple input types. Built by Techmine INC. for robust form handling in Flutter applications.**
 
-[Features](#features) • [Installation](#installation) • [Quick Start](#quick-start) • [Documentation](#documentation) • [Examples](#examples)
+[Features](#-features) • [Installation](#-installation) • [Quick Start](#-quick-start) • [Documentation](#-documentation) • [Example](/example)
 </div>
 </div>
 
